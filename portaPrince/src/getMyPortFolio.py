@@ -8,6 +8,7 @@ from pyalgotrade.tools import yahoofinance
 
 from matplotlib import pyplot as plt
 import numpy as np
+import datetime as dt
 
 myPortfolio = ['LYQ1.F','LYQ6.F','LYSX.F','L8I1.F'
                              , 'LYPX.F', 'LYM8.DE'
@@ -15,13 +16,14 @@ myPortfolio = ['LYQ1.F','LYQ6.F','LYSX.F','L8I1.F'
 
 def readCsvFiles(Portfolio, year):
     listOfNumbers = []
+    convertfunc = lambda x: dt.datetime.strptime(x, '%Y-%m-%d')
     for paper in Portfolio:
         fileName = paper + '-' + str(year) + '-yahoofinance.csv'
-        dataFromThisFile = np.genfromtxt('/tmp/test/'+fileName, delimiter=',',skip_header=True)
+        dataFromThisFile = np.genfromtxt('/tmp/test/'+fileName, delimiter=',', names=True,dtype=None, converters={'Date': convertfunc})
         listOfNumbers.append(dataFromThisFile)
         
+        print dataFromThisFile['Close']
         print fileName, len(dataFromThisFile)
-        print dataFromThisFile
         
     return listOfNumbers
 
@@ -32,12 +34,12 @@ def plotRelative(dataToPlot, axisToPlotOn):
 
     
     
-def normalize(dataToNormalize, columnToNormalize=4):
+def normalize(dataToNormalize, columnToNormalize='Close'):
     normalizedData = []
     for dataSet in dataToNormalize:
-        firstPoint = dataSet[0,columnToNormalize]
+        firstPoint = dataSet[columnToNormalize][0]
         print firstPoint
-        normalizedData.append(dataSet[:,columnToNormalize]/firstPoint)
+        normalizedData.append(dataSet[columnToNormalize]/firstPoint)
         
     print normalizedData
     return normalizedData
