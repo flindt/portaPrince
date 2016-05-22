@@ -7,6 +7,7 @@ Created on 21 May 2016
 from pyalgotrade.tools import yahoofinance
 
 from matplotlib import pyplot as plt
+from matplotlib import dates as mdates
 import numpy as np
 import datetime as dt
 
@@ -66,9 +67,28 @@ def errorDistance(data):
     return np.sqrt(result)
 
 
-if __name__ == '__main__':   
-    fig, (ax0, ax1, ax2) = plt.subplots(nrows=3)
+def setUpPlot():
+    # import constants for the days of the week
+    from matplotlib.dates import MO, TU, WE, TH, FR, SA, SU
+
+    fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, sharex=True)
     plt.style.context('fivethirtyeight')
+    
+    years = mdates.YearLocator()    
+    months = mdates.MonthLocator()
+    weeks = mdates.WeekdayLocator(byweekday=(SU, SA))
+    
+    weeksFmt = mdates.DateFormatter('%d')
+    ax1.xaxis.set_major_formatter(weeksFmt)
+    
+    ax1.xaxis.set_major_locator(years)
+    ax1.xaxis.set_minor_locator(weeks)
+    ax1.grid(which='both', axis='x')
+    
+    return (ax0, ax1, ax2)
+
+if __name__ == '__main__':   
+    (ax0, ax1, ax2) = setUpPlot()
      
     dataList = readCsvFiles(myPortfolio, 2016)
     dataNormalised = normalize(dataList)
@@ -80,5 +100,5 @@ if __name__ == '__main__':
     error = errorDistance(dataRelative[1])
     ax2.plot(dataRelative[0], error)
     
-    plt.show()
+    plt.show(block=True)
     pass
