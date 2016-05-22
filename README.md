@@ -5,18 +5,34 @@ We use [pyAlgoTrade](http://gbeced.github.io/pyalgotrade/) for this project, and
 To run use
 ----------
 
-  `cd portaPrince/src`
-  `python getMyPortFolio.py`
+Update/download the data
+
+    `python downloadPortfolio.py`
+
+Run the "main" program
+
+    `python getMyPortFolio.py`
   
 
 Troubleshooting
 ------------------
 
-`ImportError: No module named pyalgotrade.tools` when running the program:
+### pyalgotrade missing
+
+You get the error
+
+    `ImportError: No module named pyalgotrade.tools` when running the program:
   
-  install the module (as root): `pip install pyalgotrade`
+solution
 
+    install the module (as root): `pip install pyalgotrade`
 
-`IOError: data/<somefile>.csv not found.`
+### missing data
 
-  run the download script: `python downloadPortfolio.py`
+When running the main program your get
+
+    `IOError: data/<somefile>.csv not found.`
+
+solution
+
+    run the download script: `python downloadPortfolio.py`
