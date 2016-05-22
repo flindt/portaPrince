@@ -16,3 +16,7 @@ Troubleshooting
   
   install the module (as root): `pip install pyalgotrade`
 
+
+`IOError: data/<somefile>.csv not found.`
+
+  run the download script: `python downloadPortfolio.py`
