@@ -12,11 +12,7 @@ To run use
 Troubleshooting
 ------------------
 
-Libary errors
-
-    `ImportError: No module named pyalgotrade.tools`
-
-install the module (as root)
-
-    `pip install pyalgotrade`
+`ImportError: No module named pyalgotrade.tools` when running the program:
+  
+  install the module (as root): `pip install pyalgotrade`
 
