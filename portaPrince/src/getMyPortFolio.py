@@ -29,25 +29,30 @@ def readCsvFiles(Portfolio, year):
 
 def plotRelative(dataToPlot, axisToPlotOn):
     for dataSet in dataToPlot:
-        x = np.arange(len(dataSet))
-        axisToPlotOn.plot(x, dataSet)
+        axisToPlotOn.plot(dataSet[0], dataSet[1])
 
-    
+def plot1Date(dataToPlot, axisToPlotOn):
+    x = dataToPlot[0]
+    for dataSet in dataToPlot[1]:
+        axisToPlotOn.plot(x, dataSet)
     
 def normalize(dataToNormalize, columnToNormalize='Close'):
     normalizedData = []
     for dataSet in dataToNormalize:
-        firstPoint = dataSet[columnToNormalize][0]
+        firstPoint = dataSet[columnToNormalize][-1]
         print firstPoint
-        normalizedData.append(dataSet[columnToNormalize]/firstPoint)
+        normalizedData.append([dataSet['Date'], dataSet[columnToNormalize]/firstPoint])
         
     print normalizedData
     return normalizedData
   
 def relativeData(dataToRelative):
-    
-    sumVector = np.sum(dataToRelative, axis=0)
-    return dataToRelative / sumVector * 6
+    dataLocalList = []
+    for dataSet in dataToRelative:
+        dataLocalList.append(dataSet[1])
+    sumVector = np.sum(dataLocalList, axis=0)
+    resultVector = dataLocalList / sumVector * 6
+    return [dataSet[0],resultVector]
     
 
 def fetchMyPortfolio():
@@ -56,8 +61,8 @@ def fetchMyPortfolio():
 def errorDistance(data):
     target = np.ones(len(data[0]))
     result = np.zeros(len(data[0]))
-    for set in data:
-        result += (set - target)**2
+    for dataSet in data:
+        result += (dataSet - target)**2
     return np.sqrt(result)
 
 
@@ -70,11 +75,10 @@ if __name__ == '__main__':
     plotRelative(dataNormalised, ax0)
     
     dataRelative = relativeData(dataNormalised)
-    plotRelative( dataRelative, ax1 )
+    plot1Date(dataRelative, ax1 )
     
-    error = errorDistance(dataRelative)
-    x = np.arange(len(error))
-    ax2.plot(x, error)
+    error = errorDistance(dataRelative[1])
+    ax2.plot(dataRelative[0], error)
     
     plt.show()
     pass
