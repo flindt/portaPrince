@@ -10,17 +10,19 @@ from matplotlib import pyplot as plt
 from matplotlib import dates as mdates
 import numpy as np
 import datetime as dt
+import os
 
 myPortfolio = ['LYQ1.F','LYQ6.F','LYSX.F','L8I1.F'
                              , 'LYPX.F', 'LYM8.DE'
                              ]
+dataDir = "data/"
 
 def readCsvFiles(Portfolio, year):
     listOfNumbers = []
     convertfunc = lambda x: dt.datetime.strptime(x, '%Y-%m-%d')
     for paper in Portfolio:
         fileName = paper + '-' + str(year) + '-yahoofinance.csv'
-        dataFromThisFile = np.genfromtxt('/tmp/test/'+fileName, delimiter=',', names=True,dtype=None, converters={'Date': convertfunc})
+        dataFromThisFile = np.genfromtxt(dataDir+fileName, delimiter=',', names=True,dtype=None, converters={'Date': convertfunc})
         listOfNumbers.append(dataFromThisFile)
         
         print dataFromThisFile['Close']
@@ -57,7 +59,10 @@ def relativeData(dataToRelative):
     
 
 def fetchMyPortfolio():
-    yahoofinance.build_feed(myPortfolio, 2000, 2016, '/tmp/test',skipErrors=True)
+    if not os.path.exists(dataDir):
+        os.makedirs(dataDir)
+
+    yahoofinance.build_feed(myPortfolio, 2000, 2016, dataDir,skipErrors=True)
 
 def errorDistance(data):
     target = np.ones(len(data[0]))
@@ -87,7 +92,7 @@ def setUpPlot():
     
     return (ax0, ax1, ax2)
 
-if __name__ == '__main__':   
+if __name__ == '__main__':    
     (ax0, ax1, ax2) = setUpPlot()
      
     dataList = readCsvFiles(myPortfolio, 2016)
