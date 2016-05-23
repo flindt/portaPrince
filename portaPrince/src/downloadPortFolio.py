@@ -22,7 +22,7 @@
 #  
 #  
 
-from getMyPortFolio import *
+from getMyPortFolio import fetchMyPortfolio, myPortfolio
 
 if __name__ == '__main__':
     print "Doanloading and updating data"
