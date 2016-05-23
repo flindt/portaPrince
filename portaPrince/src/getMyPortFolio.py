@@ -19,10 +19,9 @@ dataDir = "data/"
 
 def readCsvFiles(Portfolio, year):
     listOfNumbers = []
-    convertfunc = lambda x: dt.datetime.strptime(x, '%Y-%m-%d')
     for paper in Portfolio:
         fileName = paper + '-' + str(year) + '-yahoofinance.csv'
-        dataFromThisFile = np.genfromtxt(dataDir+fileName, delimiter=',', names=True,dtype=None, converters={'Date': convertfunc})
+        dataFromThisFile = np.genfromtxt(dataDir+fileName, delimiter=',', names=True,dtype=None, converters={'Date': lambda x: dt.datetime.strptime(x, '%Y-%m-%d')})
         listOfNumbers.append(dataFromThisFile)
         
         print dataFromThisFile['Close']
@@ -74,7 +73,7 @@ def errorDistance(data):
 
 def setUpPlot():
     # import constants for the days of the week
-    from matplotlib.dates import MO, TU, WE, TH, FR, SA, SU
+    from matplotlib.dates import SA, SU
 
     fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, sharex=True)
     plt.style.context('fivethirtyeight')
@@ -106,4 +105,3 @@ if __name__ == '__main__':
     ax2.plot(dataRelative[0], error)
     
     plt.show(block=True)
-    pass
