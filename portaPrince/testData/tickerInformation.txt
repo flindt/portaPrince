@@ -1,0 +1,11 @@
+Yahoo Ticker;Nordnet Ticker;Name;Description
+
+SC0D.F;SC0D;EURO STOXX 50 Source ETF;
+
+L8I1.F;L8I1;Lyxor ETF China Enterprise (HSCEI)
+
+LYM8.DE;LYM8;Lyxor ETF World Water
+
+LYPL.F;LYPL;Lyxor ETF MSCI Europe Real Estate
+LYPK.F;LYPK;Lyxor ETF EuroMTS AAA Government Bond;
+LYPX.F;LYPX;Lyxor ETF Broad Commodities Momentum TR
