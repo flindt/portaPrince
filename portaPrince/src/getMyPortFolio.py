@@ -14,7 +14,21 @@ import os
 
 myPortfolio = ['LYQ1.F','LYQ6.F','LYSX.F','L8I1.F'
                              , 'LYPX.F', 'LYM8.DE'
+                             , 'SPY1.F'
+                             , 'VDE', 'VGT'
+                             , 'BIV', 'VGLT'
+                             , 'VNR', 'VOO'
+                             , 'BIV', 'VOOG'
+                             , 'SC0D.F', 'LYPL.F'
+                             
                              ]
+                             
+myPortfolioSmall = ['LYQ1.F','LYQ6.F','LYSX.F','L8I1.F'
+                             , 'LYPX.F', 'LYM8.DE'
+                             , 'SC0D.F', 'SPY1.F'
+                             , 'VDE', 'VGT'
+                             ]
+                             
 dataDir = "data/"
 
 def readCsvFiles(Portfolio, year):
@@ -38,10 +52,12 @@ def plot1Date(dataToPlot, axisToPlotOn):
     for dataSet in dataToPlot[1]:
         axisToPlotOn.plot(x, dataSet)
     
-def normalize(dataToNormalize, columnToNormalize='Close'):
+def normalize(dataToNormalize, columnToNormalize='Close', dateToUse=None):
     normalizedData = []
+    if dateToUse is None:
+        index100 = -1
     for dataSet in dataToNormalize:
-        firstPoint = dataSet[columnToNormalize][-1]
+        firstPoint = dataSet[columnToNormalize][index100]
         print firstPoint
         normalizedData.append([dataSet['Date'], dataSet[columnToNormalize]/firstPoint])
         
@@ -71,7 +87,7 @@ def errorDistance(data):
     return np.sqrt(result)
 
 
-def setUpPlot():
+def setUpPlotRelative():
     # import constants for the days of the week
     from matplotlib.dates import SA, SU
 
@@ -80,21 +96,21 @@ def setUpPlot():
     
     years = mdates.YearLocator()    
     months = mdates.MonthLocator()
-    weeks = mdates.WeekdayLocator(byweekday=(SU, SA))
+    weeks = mdates.WeekdayLocator()
     
     weeksFmt = mdates.DateFormatter('%d')
     ax1.xaxis.set_major_formatter(weeksFmt)
     
-    ax1.xaxis.set_major_locator(years)
+    #ax1.xaxis.set_major_locator(months)
     ax1.xaxis.set_minor_locator(weeks)
-    ax1.grid(which='both', axis='x')
+    ax1.grid(which='minor', axis='x')
     
     return (ax0, ax1, ax2)
 
-if __name__ == '__main__':    
-    (ax0, ax1, ax2) = setUpPlot()
+def analyseRelative(year, portfolio):
+    (ax0, ax1, ax2) = setUpPlotRelative()
      
-    dataList = readCsvFiles(myPortfolio, 2016)
+    dataList = readCsvFiles(portfolio, year)
     dataNormalised = normalize(dataList)
     plotRelative(dataNormalised, ax0)
     
@@ -103,5 +119,9 @@ if __name__ == '__main__':
     
     error = errorDistance(dataRelative[1])
     ax2.plot(dataRelative[0], error)
+
+
+if __name__ == '__main__':    
+    analyseRelative(2016, myPortfolio)
     
     plt.show(block=True)
