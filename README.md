@@ -1,5 +1,7 @@
 # portaPrince
 
+[![Code Issues](https://www.quantifiedcode.com/api/v1/project/8888857578124a1ab11e818536ce8170/badge.svg)](https://www.quantifiedcode.com/app/project/8888857578124a1ab11e818536ce8170)
+
 We use [pyAlgoTrade](http://gbeced.github.io/pyalgotrade/) for this project, and it has [nice documentation](http://gbeced.github.io/pyalgotrade/docs/v0.17/html/).
 
 To run use
