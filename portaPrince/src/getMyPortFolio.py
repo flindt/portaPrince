@@ -8,8 +8,10 @@ from pyalgotrade.tools import yahoofinance
 
 from matplotlib import pyplot as plt
 from matplotlib import dates as mdates
+from matplotlib.widgets import MultiCursor
 import numpy as np
 import datetime as dt
+import pandas as pd
 import os
 
 myPortfolio = ['LYQ1.F','LYQ6.F','LYSX.F','L8I1.F'
@@ -18,12 +20,12 @@ myPortfolio = ['LYQ1.F','LYQ6.F','LYSX.F','L8I1.F'
                              , 'VDE', 'VGT'
                              , 'BIV', 'VGLT'
                              , 'VNR', 'VOO'
-                             , 'BIV', 'VOOG'
-                             , 'SC0D.F', 'LYPL.F'
-                             
+                             , 'VOOG'
+                             , 'SC0D.F'
+                             #, 'LYPL.F'
                              ]
                              
-myPortfolioSmall = ['LYQ1.F','LYQ6.F','LYSX.F','L8I1.F'
+myPortfolio2 = ['LYQ1.F','LYQ6.F','LYSX.F','L8I1.F'
                              , 'LYPX.F', 'LYM8.DE'
                              , 'SC0D.F', 'SPY1.F'
                              , 'VDE', 'VGT'
@@ -33,35 +35,53 @@ dataDir = "data/"
 
 def readCsvFiles(Portfolio, year):
     listOfNumbers = []
+    pandaTotal = None
     for paper in Portfolio:
         fileName = paper + '-' + str(year) + '-yahoofinance.csv'
         dataFromThisFile = np.genfromtxt(dataDir+fileName, delimiter=',', names=True,dtype=None, converters={'Date': lambda x: dt.datetime.strptime(x, '%Y-%m-%d')})
         listOfNumbers.append(dataFromThisFile)
+        pandaFrame = pd.read_csv(dataDir+fileName,index_col=0, parse_dates=True)
+        pandaFrame.columns = pd.MultiIndex.from_product([[paper],[u'Open', u'High', u'Low', u'Close', u'Volume',u'Adj Close']])
         
-        print dataFromThisFile['Close']
-        print fileName, len(dataFromThisFile)
+        if pandaTotal is None:
+            pandaTotal = pandaFrame
+        else:
+            print pandaFrame.head(2)
+            pandaTotal = pandaTotal.join(pandaFrame, how='outer')
         
-    return listOfNumbers
+    pandaTotal = pandaTotal.fillna(method='pad', inplace=False)
+    newList = {}
+    for paper in pandaTotal.columns.levels[0]:
+        newList[paper] = pandaTotal[paper]['Close']
+        
+        print newList
+    return newList, pandaTotal
 
 def plotRelative(dataToPlot, axisToPlotOn):
+    plots = []
     for dataSet in dataToPlot:
-        axisToPlotOn.plot(dataSet[0], dataSet[1])
-
+        plots.append( axisToPlotOn.plot(dataToPlot[dataSet], label=dataSet) )
+    
+    handles, labels = axisToPlotOn.get_legend_handles_labels()
+    labels = myPortfolio
+    axisToPlotOn.legend(handles, labels 
+                        , loc='upper left',
+                        bbox_to_anchor = [1, 1],
+                        shadow = True)    
+    
 def plot1Date(dataToPlot, axisToPlotOn):
     x = dataToPlot[0]
     for dataSet in dataToPlot[1]:
-        axisToPlotOn.plot(x, dataSet)
+        axisToPlotOn.plot(x, dataSet, picker=5)
     
 def normalize(dataToNormalize, columnToNormalize='Close', dateToUse=None):
-    normalizedData = []
+    normalizedData = {}
     if dateToUse is None:
-        index100 = -1
+        index100 = 0
     for dataSet in dataToNormalize:
-        firstPoint = dataSet[columnToNormalize][index100]
-        print firstPoint
-        normalizedData.append([dataSet['Date'], dataSet[columnToNormalize]/firstPoint])
+        firstPoint = dataToNormalize[dataSet][index100]
+        normalizedData[dataSet] = dataToNormalize[dataSet]/firstPoint
         
-    print normalizedData
     return normalizedData
   
 def relativeData(dataToRelative):
@@ -69,7 +89,7 @@ def relativeData(dataToRelative):
     for dataSet in dataToRelative:
         dataLocalList.append(dataSet[1])
     sumVector = np.sum(dataLocalList, axis=0)
-    resultVector = dataLocalList / sumVector * 6
+    resultVector = dataLocalList / sumVector * 8
     return [dataSet[0],resultVector]
     
 
@@ -94,23 +114,31 @@ def setUpPlotRelative():
     fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, sharex=True)
     plt.style.context('fivethirtyeight')
     
-    years = mdates.YearLocator()    
-    months = mdates.MonthLocator()
-    weeks = mdates.WeekdayLocator()
+    #years = mdates.YearLocator()    
+    #months = mdates.MonthLocator()
+    #weeks = mdates.WeekdayLocator()
     
-    weeksFmt = mdates.DateFormatter('%d')
-    ax1.xaxis.set_major_formatter(weeksFmt)
+    #weeksFmt = mdates.DateFormatter('%d')
+    #ax1.xaxis.set_major_formatter(weeksFmt)
     
     #ax1.xaxis.set_major_locator(months)
-    ax1.xaxis.set_minor_locator(weeks)
-    ax1.grid(which='minor', axis='x')
+    #ax1.xaxis.set_minor_locator(weeks)
+    #ax1.grid(which='minor', axis='x')
     
     return (ax0, ax1, ax2)
+
+def onpick(event):
+    thisline = event.artist
+    xdata = thisline.get_xdata()
+    ydata = thisline.get_ydata()
+    ind = event.ind
+    print 'onpick points:', zip(xdata[ind], ydata[ind])
+
 
 def analyseRelative(year, portfolio):
     (ax0, ax1, ax2) = setUpPlotRelative()
      
-    dataList = readCsvFiles(portfolio, year)
+    dataList, pandaFrame = readCsvFiles(portfolio, year)
     dataNormalised = normalize(dataList)
     plotRelative(dataNormalised, ax0)
     
