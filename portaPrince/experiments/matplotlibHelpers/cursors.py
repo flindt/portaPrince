@@ -37,8 +37,8 @@ class SnaptoCursor(object):
         self.lx.set_ydata(y)
         self.ly.set_xdata(x)
 
-        self.txt.set_text('x=%1.2f, y=%1.2f' % (x, y))
-        print('x=%1.2f, y=%1.2f' % (x, y))
+        self.txt.set_text('x={0:1.2f}, y={1:1.2f}'.format(x, y))
+        print('x={0:1.2f}, y={1:1.2f}'.format(x, y))
         plt.draw()
         
 class Cursor(object):
@@ -59,5 +59,5 @@ class Cursor(object):
         self.lx.set_ydata(y)
         self.ly.set_xdata(x)
 
-        self.txt.set_text('x=%1.2f, y=%1.2f' % (x, y))
+        self.txt.set_text('x={0:1.2f}, y={1:1.2f}'.format(x, y))
         plt.draw()
