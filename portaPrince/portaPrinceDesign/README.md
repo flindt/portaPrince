@@ -4,6 +4,6 @@
 Rules
 ------
 
-Observer KISS, SOLID and keep things small and testable.
+Observe KISS, SOLID and keep things small and testable.
 
 
