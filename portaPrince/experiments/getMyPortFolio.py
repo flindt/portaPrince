@@ -18,7 +18,7 @@ import os
 import matplotlibHelpers.cursors as crs
 
 myPortfolio = ['LYQ1.F','LYQ6.F','LYSX.F','L8I1.F'
-                             , 'LYPX.F', 'LYM8.DE'
+                             , 'LYM8.DE'
                              , 'SPY1.F'
                              , 'VDE', 'VGT'
                              , 'BIV', 'VGLT'
@@ -30,12 +30,12 @@ myPortfolio = ['LYQ1.F','LYQ6.F','LYSX.F','L8I1.F'
                              ]
                              
 myPortfolio2 = ['LYQ1.F','LYQ6.F','LYSX.F','L8I1.F'
-                             , 'LYPX.F', 'LYM8.DE'
+                             , 'LYM8.DE'
                              , 'SC0D.F', 'SPY1.F'
                              , 'VDE', 'VGT'
                              ]
                              
-dataDir = "data/"
+dataDir = "/tmp/data/"
 
 def readCsvFiles(Portfolio, year):
     listOfNumbers = []
@@ -96,7 +96,7 @@ def fetchMyPortfolio():
     if not os.path.exists(dataDir):
         os.makedirs(dataDir)
 
-    yahoofinance.build_feed(myPortfolio, 2014, 2016, dataDir,skipErrors=True)
+    yahoofinance.build_feed(myPortfolio, 2017, 2017, dataDir,skipErrors=False)
 
 def errorDistance(data):
     target = np.ones(len(data[0]))
