@@ -60,7 +60,7 @@ class Example(QMainWindow):
         
     def addPlots(self):
         import pandas
-        rutData = pandas.read_csv("../testData/indexes/RUT 2010-2017.csv", sep='\t')
+        rutData = pandas.read_csv("../testData/indexes/RUT 2010-2017.csv", sep='\t',parse_dates=['Date'])
         rutData['Delta'] = rutData.Close.diff().shift(-1)
         rutData['DeltaRelative'] = rutData.Delta / rutData.Close
         
