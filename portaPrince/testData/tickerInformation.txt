@@ -9,3 +9,5 @@ LYM8.DE;LYM8;Lyxor ETF World Water
 LYPL.F;LYPL;Lyxor ETF MSCI Europe Real Estate
 LYPK.F;LYPK;Lyxor ETF EuroMTS AAA Government Bond;
 LYPX.F;LYPX;Lyxor ETF Broad Commodities Momentum TR
+LYQ2.F;LYPQ;LYXOR ETF EuroMTS 1-3Y Investment Grade
+
