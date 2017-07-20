@@ -15,7 +15,6 @@ class HistoricPredictor(object):
         self.startDate = startDate
         
     def predict(self, n=100):
-        
-        
-        return [0,1,2]
+    
+        return [100,101,102]
     

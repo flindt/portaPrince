@@ -20,7 +20,7 @@ class Test(unittest.TestCase):
 
     def testInit(self):
         import pandas
-        rutData = pandas.read_csv("../testData/indexes/RUT 2010-2017.csv", sep='\t',parse_dates=['Date']).set_index("Date")
+        rutData = pandas.read_csv("../../testData/indexes/RUT 2010-2017.csv", sep='\t',parse_dates=['Date'])
         myPred = HistoricPredictor(rutData, pandas.Timestamp("2014-01-01") )
         result = myPred.predict(10)
         
