@@ -6,7 +6,7 @@ Created on 21 Jun 2017
 
 import pyqtgraph
 #from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QApplication
-from PyQt4.QtGui import QMainWindow, QVBoxLayout, QApplication
+from PyQt4.QtGui import QMainWindow, QVBoxLayout, QApplication, QWidget, QGridLayout
 from PyQt4.QtCore import pyqtSlot
 import sys
 
@@ -31,12 +31,18 @@ class Example(QMainWindow):
         
         
     def initUI(self):   
+        self.resize(800,800)
         
-        grid = QVBoxLayout()
-                
-        self.myGraph = pyqtgraph.PlotWidget() 
+        cw = QWidget()
+        self.setCentralWidget(cw)
+        grid = QGridLayout()
+        cw.setLayout( grid )
+        self.myGraph = pyqtgraph.PlotWidget()
+        
+        grid.addWidget(self.myGraph)    
+         
         self.myGraph.fitInView(1,250,1,500)
-        self.setCentralWidget(self.myGraph)
+        self.setCentralWidget(cw)
         self.showNormal()
         
         grid.addWidget(self.myGraph)    
