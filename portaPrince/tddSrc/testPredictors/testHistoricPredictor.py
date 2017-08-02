@@ -35,10 +35,11 @@ class Test(unittest.TestCase):
         index = 0
         for i in range(2011,2017):
             for j in range(12):
-                dateStr = str(i)+'-'+str(j+1)+'-01'
-                result = HistoricPredictor(rutData, dateStr ).predict(100)
-                allResults[str(index)] = result
-                index=index+1
+                for k in range(27):
+                    dateStr = str(i)+'-'+str(j+1)+'-'+str(k+1)
+                    result = HistoricPredictor(rutData, dateStr ).predict(100)
+                    allResults[str(index)] = result
+                    index=index+1
         
         pass
 

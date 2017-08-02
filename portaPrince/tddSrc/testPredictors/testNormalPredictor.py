@@ -30,8 +30,10 @@ class Test(unittest.TestCase):
         
         allResults = pandas.DataFrame()
         for i in range(11):
-            result = myPredictor.predict(10)
+            result = myPredictor.predict(100)
             allResults[str(i)] = result
+            
+        pass
             
     def testDumpToCSV(self):
         myPredictor = NormalPredictor()
