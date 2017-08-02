@@ -20,3 +20,5 @@ class HistoricPredictor(object):
         
         return result.values[:,0]/result.values[0,0]*100
     
+    def getPrices(self, size= 100):
+        return self.predict(size)

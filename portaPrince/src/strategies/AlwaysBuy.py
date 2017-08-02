@@ -8,9 +8,9 @@ class AlwaysBuy( object ):
     def predictor(self):
         return self._predictor
     
-    def getResult(self, params ):
-        runPeriodDays = 30
-        endPrice = self._predictor.getPrices( size=runPeriodDays )['Price'][runPeriodDays-1]
+    def getResult(self, params, runPeriodDays = 25):
+        
+        endPrice = self._predictor.getPrices( size=runPeriodDays )[runPeriodDays-1]
         
         if endPrice > params['Upper'] or endPrice < params['Lower']:
             return params['Return'] - params['Risk'] - params['Fee']
