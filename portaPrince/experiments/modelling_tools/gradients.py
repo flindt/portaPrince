@@ -45,8 +45,8 @@ if __name__ == '__main__':
     # add gradients
     addGradients(pd, columnName)
     print pd
-#     
-#     # and plot it    
+
+    # and plot it    
     plot_gradient( pd, columnName)
     plt.show()
     
