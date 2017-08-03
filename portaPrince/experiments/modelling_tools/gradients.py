@@ -41,7 +41,6 @@ if __name__ == '__main__':
 
     # read data
     pd = pandas.read_csv(datafile, sep='\t')
-    pd[columnName].plot(grid=True)
 
     # add gradients
     addGradients(pd, columnName)
