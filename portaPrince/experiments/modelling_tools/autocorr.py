@@ -6,7 +6,6 @@ Created on 3 Aug 2017
 import sys
 import pandas
 import numpy
-from pygments.lexers._vim_builtins import auto
 
 testDataFile = "linear_test_data.csv"
 defaultColumnName = "model"
