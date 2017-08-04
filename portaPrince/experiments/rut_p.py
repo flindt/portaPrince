@@ -47,33 +47,39 @@ if __name__ == "__main__":
     
     # read data
     pd = pandas.read_csv(rutdatafile, sep='\t', parse_dates=['Date'])
-    pd[columnName].plot( grid=True)
+    
+    #print pd
+    #pd[columnName].plot( grid=True)
     
     # create series        
     dates = []
     allResults = pandas.DataFrame(index=range(no_days))
     index = 0
-    for i in range(2011,2016):
-        for j in range(12):
-            for k in range(27):
-                dateStr = str(i)+'-'+str(j+1)+'-'+str(k+1)
-                result = predict(pd, dateStr, no_days)
-                allResults['Series_'+str(index)] = result
-                index=index+1
-
+#     for i in range(2011,2016):
+#         for j in range(12):
+#             for k in range(27):
+#                 dateStr = str(i)+'-'+str(j+1)+'-'+str(k+1)
+#                 #result = predict(pd, dateStr, no_days)
+#                 result = data.set_index("Date").loc[startDate:][:no_days]
+#                 result = result.values[:,0]/result.values[0,0]*100
+#                 allResults['Series_'+str(index)] = result
+#                 index=index+1
+    for i in range(pd.shape[0]-no_days):
+        extract = pd[columnName][i:i+no_days].reset_index(drop=True)
+        allResults["Series_%04d"%(i,)] = extract/extract.values[0]*100
+        
     allResults.index.name="day"
 
     # er der noget med takkerne i bunden?
+    print allResults
     allResults.plot( legend=False, grid=True, alpha=0.05 )    
     
-    # creating and shoing pmap
-    plt.figure()
-    
-    p_matrix, yedges = create_pmap(allResults)
-    print p_matrix
-    print p_matrix.transpose().describe()
-    
-    plot_pmap(p_matrix, yedges, vmax=170.0/1620 )
+#     # creating and shoing pmap
+#     plt.figure()
+#     
+#     p_matrix, yedges = create_pmap(allResults)
+#     print p_matrix   
+#     plot_pmap(p_matrix, yedges, vmax=170.0/1620 )
 
     plt.show()
     print "done"
