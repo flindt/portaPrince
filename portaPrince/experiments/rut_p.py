@@ -44,11 +44,12 @@ def plot_pmap(df_heatmap, ysections, vmax=None ):
 
 if __name__ == "__main__":
     no_days = 30
-        # read data
+    
+    # read data
     pd = pandas.read_csv(rutdatafile, sep='\t', parse_dates=['Date'])
-    #plt.figure()
-    #pd[columnName].plot( grid=True)
-            
+    pd[columnName].plot( grid=True)
+    
+    # create series        
     dates = []
     allResults = pandas.DataFrame(index=range(no_days))
     index = 0
@@ -61,19 +62,12 @@ if __name__ == "__main__":
                 index=index+1
 
     allResults.index.name="day"
-    # er der noget med takkerne i bunden?
-    #plt.figure()
-    #allResults.plot( legend=False, grid=True, alpha=0.05 )    
-#     
-#     stacked = allResults.stack(new_col_name='value')
-#     stacked.index.names=[u"day", u'serie']
 
-    #print stacked
-    #create_heatmap( allResults ):
-    #print pandas.melt( stacked, id_vars=['day'], value_vars='value')
+    # er der noget med takkerne i bunden?
+    allResults.plot( legend=False, grid=True, alpha=0.05 )    
     
-    #print stacked.pivot()
-    #plt.figure()
+    # creating and shoing pmap
+    plt.figure()
     
     p_matrix, yedges = create_pmap(allResults)
     print p_matrix
