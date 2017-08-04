@@ -12,16 +12,21 @@ import matplotlib.pyplot as plt
 testDataFile = "linear_test_data.csv"
 defaultColumnName = "model"
 
-def addGradients( pd, columnName ):
+def addGradients( pd, columnName, relative=False ):
     ''' adds velocity and acceleration columns
         v_columnname and a_columnname
     '''
-    pd['v_'+columnName] = numpy.gradient(pd[columnName])
-    pd['a_'+columnName] = numpy.gradient(pd['v_'+columnName])
+    if not relative:
+        pd['v_'+columnName] = numpy.gradient(pd[columnName])
+        pd['a_'+columnName] = numpy.gradient(pd['v_'+columnName])
+    else:
+        pd['v_'+columnName] = numpy.gradient(pd[columnName])/pd[columnName]
+        pd['a_'+columnName] = numpy.gradient(pd['v_'+columnName])/pd[columnName]
+
 
 def plot_gradient( pd, columnName):
     columns = [columnName, 'v_'+columnName, 'a_'+columnName]
-    pd[columns].plot( subplots=True, legend=False)
+    pd[columns].plot( subplots=True, legend=False, grid=True)
 
 if __name__ == '__main__':
     ### some usability :-)
@@ -43,10 +48,10 @@ if __name__ == '__main__':
     pd = pandas.read_csv(datafile, sep='\t')
 
     # add gradients
-    addGradients(pd, columnName)
+    addGradients(pd, columnName, relative=False)
     print pd
 
-    # and plot it    
+    # and plot it
     plot_gradient( pd, columnName)
     plt.show()
     
