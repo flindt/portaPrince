@@ -35,34 +35,39 @@ def plot_pmap(df_heatmap, ysections, vmax=None ):
                extent=extent )
     plt.colorbar()
     
+def generate_series( data, no_days=30 ):
+    result = pandas.DataFrame(index=range(no_days))
+
+    for i in range(data.shape[0]-no_days):
+        extract = data[columnName][i:i+no_days].reset_index(drop=True)
+        result["Series_%04d"%(i,)] = extract/extract.values[0]*100
+        
+    result.index.name="day"
+    return result
 
 if __name__ == "__main__":
-    no_days = 30
+    periods = [30, 60, 90, 120, 180, 360]
     
     # read data
     pd = pandas.read_csv(rutdatafile, sep='\t', parse_dates=['Date'])
     
     print pd
     pd[columnName].plot( grid=True)
-    
-    # create series        
-    allResults = pandas.DataFrame(index=range(no_days))
-    for i in range(pd.shape[0]-no_days):
-        extract = pd[columnName][i:i+no_days].reset_index(drop=True)
-        allResults["Series_%04d"%(i,)] = extract/extract.values[0]*100
+
+    for no_days in periods:
+        # create series        
+        allResults = generate_series( pd, no_days )
         
-    allResults.index.name="day"
-
-    # er der noget med takkerne i bunden?
-    print allResults
-    allResults.plot( legend=False, grid=True, alpha=0.05 )    
+        # er der noget med takkerne i bunden?
+        print allResults
+        allResults.plot( legend=False, grid=True, alpha=0.05 )    
+        
+        # creating and shoing pmap
+        plt.figure()
+         
+        p_matrix, yedges = create_pmap(allResults)
+        print p_matrix   
+        plot_pmap(p_matrix, yedges, vmax=170.0/1620 )
     
-    # creating and shoing pmap
-    plt.figure()
-     
-    p_matrix, yedges = create_pmap(allResults)
-    print p_matrix   
-    plot_pmap(p_matrix, yedges, vmax=170.0/1620 )
-
     plt.show()
     print "done"
