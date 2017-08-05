@@ -9,6 +9,7 @@ import numpy
 
 columnName = "Close"
 rutdatafile = "../testData/indexes/RUT 2010-2017.csv"
+outputfilename = "pmap_RUT 2010-2017"
 
 def create_pmap( data, bins=200 ):
     ''' using numpy, takes the series, bins them and returns a matrix with the
@@ -68,6 +69,8 @@ if __name__ == "__main__":
         p_matrix, yedges = create_pmap(allResults)
         print p_matrix   
         plot_pmap(p_matrix, yedges, vmax=170.0/1620 )
+    
+        p_matrix.to_csv( outputfilename+"_%03d_days.csv"%(no_days), sep='\t')
     
     plt.show()
     print "done"
